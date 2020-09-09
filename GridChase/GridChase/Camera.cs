@@ -8,6 +8,9 @@ namespace GridChase {
         }
 
         #region MonoGame Pipeline
+        /* 
+            Everything that is needed from GameComponent
+         */
         public override void Initialize() {
             Position = new Vector3(0, 0, 3000.0f);
             Zoom = 1.0f;

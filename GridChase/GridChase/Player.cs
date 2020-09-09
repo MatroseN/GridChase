@@ -2,6 +2,9 @@
 using System;
 
 namespace GridChase {
+    /*
+     * PLAYABLE character
+     */
     class Player : Entity, Character {
         public Player(Game game) : base(game) {
 

@@ -23,5 +23,15 @@ namespace GridChase {
 
             return grid;
         }
+
+        public void generateMap(char[] map) {
+            foreach (char cell in map) {
+                switch (cell) {
+                    case '*':
+                        // TODO: Add a player to the Entity list
+                        break;
+                }
+            }
+        }
     }
 }

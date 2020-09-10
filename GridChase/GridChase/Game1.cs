@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 
 namespace GridChase {
     public class Game1 : Game {

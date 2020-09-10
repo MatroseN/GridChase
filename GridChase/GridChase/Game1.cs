@@ -1,14 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GridChase {
     public class Game1 : Game {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private MapGenerator _mapGenerator;
+        private List<Entity> _entities;
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
+            _mapGenerator = new MapGenerator(this);
+            _entities = new List<Entity>();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }

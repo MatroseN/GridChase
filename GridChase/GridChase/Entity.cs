@@ -10,5 +10,6 @@ namespace GridChase {
         }
 
         public Vector2 Position { get; set; }
+        public float Health { get; set; }
     }
 }

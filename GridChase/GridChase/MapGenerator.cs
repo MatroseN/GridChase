@@ -1,14 +1,14 @@
-﻿
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace GridChase {
     /* 
      Responsible for setting the different positions on the map depending on data fetched from a textfile
     */
     class MapGenerator {
-        public MapGenerator() {
-
+        public MapGenerator(Game game) {
+            this.game = game;
+            jsonConverter = new JsonConverter();
         }
 
         public int[] generateGrid(Vector2 mapSize) {
@@ -24,14 +24,16 @@ namespace GridChase {
             return grid;
         }
 
-        public void generateMap(char[] map) {
-            foreach (char cell in map) {
-                switch (cell) {
-                    case '*':
-                        // TODO: Add a player to the Entity list
-                        break;
-                }
-            }
+        public Dictionary<string, string> fetchMapData(string mapName) {
+            Dictionary<string, string> mapData = jsonConverter.toDictionary(mapName);
+            return mapData;
         }
+
+        public void generateMap(Dictionary<string, string> map, List<Entity> entities, Vector2 mapSize) {
+
+        }
+
+        private Game game;
+        private JsonConverter jsonConverter;
     }
 }

@@ -1,0 +1,15 @@
+{
+    "dimensions": {
+        "x": "25",
+        "y": "25"
+    },
+    "characters": [
+        "player",
+        {
+            "position":{
+                "x": "25",
+                "y": "25"
+            }
+        }
+    ]
+}

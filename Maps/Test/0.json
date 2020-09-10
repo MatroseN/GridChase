@@ -1,15 +1,20 @@
-{
-    "dimensions": {
-        "x": "25",
-        "y": "25"
-    },
-    "characters": [
-        "player",
-        {
-            "position":{
-                "x": "25",
-                "y": "25"
+[
+    {
+        "dimensions":[
+            {
+            "x": 25,
+            "y": 25
             }
-        }
-    ]
-}
+        ],
+        "characters":[          
+            {
+                "player":[
+                    {
+                    "x": 25,
+                    "y": 25
+                    }
+                ]
+            }
+        ]
+    }
+]

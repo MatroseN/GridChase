@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 
 namespace GridChase {
     /* 
@@ -8,32 +11,74 @@ namespace GridChase {
     class MapGenerator {
         public MapGenerator(Game game) {
             this.game = game;
-            jsonConverter = new JsonConverter();
+            this.Grid = new List<int>();
         }
 
-        public int[] generateGrid(Vector2 mapSize) {
+        private void generateGrid(Vector2 mapSize) {
             // Initialize the grid array to fit all map positions
-            int[] grid = new int[(int)mapSize.X * (int)mapSize.Y];
-
+            Grid = new List<int>((int)mapSize.X * (int)mapSize.Y);
+            int[] gridArray = new int[(int)mapSize.X * (int)mapSize.Y];
             for (int x = 0; x < (int)mapSize.X; x++) {
                 for (int y = 0; y < (int)mapSize.Y; y++) {
-                    grid[y * (int)mapSize.X + x] = 1;
+                    gridArray[y * (int)mapSize.X + x] = 1;
                 }
             }
 
-            return grid;
+            this.Grid = gridArray.ToList();
         }
 
-        public Dictionary<string, string> fetchMapData(string mapName) {
-            Dictionary<string, string> mapData = jsonConverter.toDictionary(mapName);
-            return mapData;
-        }
+        public void generateMap(List<Entity> entities, string mapName) {
+            XmlDocument xml = new XmlDocument();
+            xml.Load(mapName + ".xml");
 
-        public void generateMap(Dictionary<string, string> map, List<Entity> entities, Vector2 mapSize) {
-            // TODO: Get the map info from the map dict
+
+            foreach (XmlNode node in xml.SelectSingleNode("map").ChildNodes) {
+                switch (node.Name) {
+                    case "head":
+                        foreach (XmlNode childNode in node.ChildNodes) {
+                            if (String.Equals(childNode.Name, "size")) {
+                                int x = 0;
+                                int y = 0;
+                                foreach (XmlNode childOfChildNode in childNode) {
+                                    if (String.Equals(childOfChildNode.Name, "x")) {
+                                        Int32.TryParse(childOfChildNode.InnerText, out x);
+                                    }else if(String.Equals(childOfChildNode.Name, "y")) {
+                                        Int32.TryParse(childOfChildNode.InnerText, out y);
+                                    }
+                                }
+                                Vector2 mapSize = new Vector2(x, y);
+                                generateGrid(mapSize);
+                            }
+                        }
+                        break;
+
+                    case "characters":
+                        foreach (XmlNode childNode in node) {
+                            foreach (XmlNode childOfChildNode in childNode) {
+                                if (String.Equals(childOfChildNode.Name, "player")) {
+                                    int x = 0;
+                                    int y = 0;
+                                    foreach (XmlNode childOfChildOfchildNode in childOfChildNode) {
+                                        if (String.Equals(childOfChildOfchildNode.Name, "position")) {
+                                            foreach(XmlNode childOfChildOfChildOfChild in childOfChildOfchildNode)
+                                            if (String.Equals(childOfChildOfChildOfChild.Name, "x")) {
+                                                Int32.TryParse(childOfChildOfChildOfChild.InnerText, out x);
+                                            } else if (String.Equals(childOfChildOfChildOfChild.Name, "y")) {
+                                                Int32.TryParse(childOfChildOfChildOfChild.InnerText, out y);
+                                            }
+                                        }
+                                    }
+                                    Vector2 position = new Vector2(x, y);
+                                    entities.Add(new Player(game, position));
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
         }
 
         private Game game;
-        private JsonConverter jsonConverter;
+        public List<int> Grid { get; set; }
     }
 }

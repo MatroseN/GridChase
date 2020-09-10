@@ -1,20 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace GridChase {
     public class Game1 : Game {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private MapGenerator _mapGenerator;
+        private List<Entity> _entities;
+        private List<int> _grid;
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
+            _mapGenerator = new MapGenerator(this);
+            _entities = new List<Entity>();
+            _grid = new List<int>();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize() {
             // TODO: Add your initialization logic here
+            _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0");
+            _grid = _mapGenerator.Grid;
 
             base.Initialize();
         }

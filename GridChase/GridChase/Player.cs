@@ -6,8 +6,9 @@ namespace GridChase {
      * PLAYABLE character
      */
     class Player : Entity, Character {
-        public Player(Game game) : base(game) {
-
+        public Player(Game game, Vector2 position) : base(game) {
+            this.Position = position;
+            this.Health = 1.0f;
         }
 
         #region Monogame Pipeline

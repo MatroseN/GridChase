@@ -1,5 +1,4 @@
 ﻿
-
 namespace GridChase {
     /*
      * For Playable and NON-PLAYABLE / PLAYABLE characters

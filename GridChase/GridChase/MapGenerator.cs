@@ -30,7 +30,7 @@ namespace GridChase {
         }
 
         public void generateMap(Dictionary<string, string> map, List<Entity> entities, Vector2 mapSize) {
-
+            // TODO: Get the map info from the map dict
         }
 
         private Game game;

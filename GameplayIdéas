@@ -7,6 +7,5 @@ How it works:
   * When timer ends the light turns on and the guards can see you (if there is a clear view)
   * When a guard sees you he will chase you down.
   * If a guar catches you you will be brought back to the start of the level
-  * You can only hold a maximum amount of stepps at one time. Maybe increase every 2 levels?
   * There will be other pickups to help you dispose/slowdown/confuse/gain attention of guards
   * If you run out of stepps its over

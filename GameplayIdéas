@@ -1,11 +1,12 @@
 How it works:
   * Goal is to reach the exit
   * Guards will guard the level
-  * Guards have a visible field of view
+  * Guards have a visible field of view (Their flashlight)
   * Guards vill move in real time
-  * If a guard detects you you will be brought back to the start of the level
-  * You have a certain amount of stepps/energy available
-  * Gain stepps/Energy from a pickup. Like a protein bar for example
+  * There is a timer
+  * When timer ends the light turns on and the guards can see you (if there is a clear view)
+  * When a guard sees you he will chase you down.
+  * If a guar catches you you will be brought back to the start of the level
   * You can only hold a maximum amount of stepps at one time. Maybe increase every 2 levels?
   * There will be other pickups to help you dispose/slowdown/confuse/gain attention of guards
   * If you run out of stepps its over

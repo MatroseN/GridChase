@@ -11,23 +11,22 @@ namespace GridChase {
     class MapGenerator {
         public MapGenerator(Game game) {
             this.game = game;
-            this.Grid = new List<int>();
         }
 
-        private void generateGrid(Vector2 mapSize) {
+        private void generateGrid(Vector2 mapSize, Vector2 blockSize) {
             // Initialize the grid array to fit all map positions
-            Grid = new List<int>((int)mapSize.X * (int)mapSize.Y);
-            int[] gridArray = new int[(int)mapSize.X * (int)mapSize.Y];
-            for (int x = 0; x < (int)mapSize.X; x++) {
-                for (int y = 0; y < (int)mapSize.Y; y++) {
-                    gridArray[y * (int)mapSize.X + x] = 1;
+            List<Vector2> Grid = new List<Vector2>();
+            int i = 0;
+            int[] grid = new int[((int)mapSize.Y / (int)blockSize.Y) * ((int)mapSize.X / (int)blockSize.Y)];
+            for (int y = 0; y < (int)mapSize.Y; y+=(int)blockSize.Y) {
+                for (int x = 0; x < (int)mapSize.X; x+=(int)blockSize.X) {
+                    grid[i] = y * x;
+                    i++;
                 }
             }
-
-            this.Grid = gridArray.ToList();
         }
 
-        public void generateMap(List<Entity> entities, string mapName) {
+        public void generateMap(List<Entity> entities, string mapName, Vector2 blockSize) {
             XmlDocument xml = new XmlDocument();
             xml.Load(mapName + ".xml");
 
@@ -47,7 +46,7 @@ namespace GridChase {
                                     }
                                 }
                                 Vector2 mapSize = new Vector2(x, y);
-                                generateGrid(mapSize);
+                                generateGrid(mapSize, blockSize);
                             }
                         }
                         break;
@@ -93,6 +92,5 @@ namespace GridChase {
         }
 
         private Game game;
-        public List<int> Grid { get; set; }
     }
 }

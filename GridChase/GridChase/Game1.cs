@@ -9,20 +9,20 @@ namespace GridChase {
         private SpriteBatch _spriteBatch;
         private MapGenerator _mapGenerator;
         private List<Entity> _entities;
-        private List<int> _grid;
+        private Vector2[] _grid;
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
             _mapGenerator = new MapGenerator(this);
             _entities = new List<Entity>();
-            _grid = new List<int>();
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
 
         protected override void Initialize() {
             // TODO: Add your initialization logic here
-            _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0");
+            Vector2 blockSize = new Vector2(32, 32);
+            _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0", blockSize);
             _grid = _mapGenerator.Grid;
 
             base.Initialize();

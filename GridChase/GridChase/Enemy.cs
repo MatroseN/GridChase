@@ -6,7 +6,7 @@ namespace GridChase {
      * Enemies to the PLAYABLE characters
      */
     class Enemy : Entity, Character{
-        public Enemy(Game1 game, Vector2 position) : base(game) {
+        public Enemy(Game game, Vector2 position) : base(game) {
             this.Position = position;
             this.Health = 1.0f;
         }

@@ -70,6 +70,20 @@ namespace GridChase {
                                     }
                                     Vector2 position = new Vector2(x, y);
                                     entities.Add(new Player(game, position));
+                                }else if (String.Equals(childOfChildNode.Name, "enemy")) {
+                                    int x = 0;
+                                    int y = 0;
+                                    foreach (XmlNode childOfChildOfchildNode in childOfChildNode) {
+                                        if (String.Equals(childOfChildOfchildNode.Name, "position")) {
+                                            foreach (XmlNode childOfChildOfChildOfChild in childOfChildOfchildNode)
+                                                if (String.Equals(childOfChildOfChildOfChild.Name, "x")) {
+                                                    Int32.TryParse(childOfChildOfChildOfChild.InnerText, out x);
+                                                } else if (String.Equals(childOfChildOfChildOfChild.Name, "y")) {
+                                                    Int32.TryParse(childOfChildOfChildOfChild.InnerText, out y);
+                                                }
+                                        }
+                                    }
+                                    entities.Add(new Enemy(game, new Vector2(x, y)));
                                 }
                             }
                         }

@@ -9,6 +9,7 @@ namespace GridChase {
         public Enemy(Game game, Vector2 position) : base(game) {
             this.Position = position;
             this.Health = 1.0f;
+            this.Tag = Tag.enemy;
         }
 
         #region Monogame Pipeline

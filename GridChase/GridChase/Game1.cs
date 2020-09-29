@@ -34,8 +34,12 @@ namespace GridChase {
             _grid = _mapGenerator.Grid;
             _block = new Block(new Vector2(32, 32));
 
-            _player = new Block(new Vector2(32, 32));
-            _enemy = new Block(new Vector2(32, 32));
+            _playerBlock = new Block(new Vector2(32, 32));
+            _enemyBlock = new Block(new Vector2(32, 32));
+
+            foreach (Entity entity in _entities) {
+                entity.calculatePosition(_windowSize, _block.size);
+            }
 
             base.Initialize();
         }
@@ -45,8 +49,8 @@ namespace GridChase {
 
             // TODO: use this.Content to load your game content here
             _block.createTexture(GraphicsDevice, pixel => Color.DarkSlateGray);
-            _player.createTexture(GraphicsDevice, pixel => Color.Green);
-            _enemy.createTexture(GraphicsDevice, pixel => Color.Red);
+            _playerBlock.createTexture(GraphicsDevice, pixel => Color.Green);
+            _enemyBlock.createTexture(GraphicsDevice, pixel => Color.Red);
         }
 
         protected override void Update(GameTime gameTime) {
@@ -54,6 +58,21 @@ namespace GridChase {
                 Exit();
 
             // TODO: Add your update logic here
+            foreach (Entity entity in _entities) {
+                entity.Update(gameTime);
+
+                if (entity.Position.X >= _windowSize.X) {
+                    entity.Position = new Vector2(_windowSize.X - _block.size.X, entity.Position.Y);
+                }else if (entity.Position.X <= 0) {
+                    entity.Position = new Vector2(0, entity.Position.Y);
+                }
+
+                if (entity.Position.Y >= _windowSize.Y - _block.size.X) {
+                    entity.Position = new Vector2(entity.Position.X, _windowSize.Y - _block.size.Y);
+                }else if (entity.Position.Y <= 0) {
+                    entity.Position = new Vector2(entity.Position.X, 0);
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -67,21 +86,14 @@ namespace GridChase {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
             }
 
-            foreach (Entity entity in _entities) {
-                Vector2 pos = new Vector2(entity.Position.X * _block.size.X, entity.Position.Y * _block.size.Y);
-                if (pos.X >= _windowSize.X) {
-                    pos = new Vector2(_windowSize.X - _player.size.X, pos.Y);
-                }
-                if (pos.Y >= _windowSize.Y) {
-                    pos = new Vector2(pos.X, pos.Y - _player.size.Y);
-                }
+            foreach (Entity entity in _entities) {               
 
                 switch (entity.Tag) {
                     case Tag.player:
-                        _spriteBatch.Draw(_player.texture, pos, Color.White);
+                        _spriteBatch.Draw(_playerBlock.texture, entity.Position, Color.White);
                         break;
                     case Tag.enemy:
-                        _spriteBatch.Draw(_enemy.texture, pos, Color.White);
+                        _spriteBatch.Draw(_enemyBlock.texture, entity.Position, Color.White);
                         break;
                 }
             }
@@ -92,7 +104,7 @@ namespace GridChase {
         }
 
         private Block _block;
-        private Block _player;
-        private Block _enemy;
+        private Block _playerBlock;
+        private Block _enemyBlock;
     }
 }

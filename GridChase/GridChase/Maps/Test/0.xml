@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <map>
-    <head>
-        <size>
-            <x>25</x>
-            <y>25</y>
-        </size>
-    </head>
-    <characters>
-        <players>
-            <player>
-                <position>
-                    <x>25</x>
-                    <y>25</y>
-                </position>
-            </player>
-        </players>
-    </characters>
+  <head>
+    <size>
+        <x>25</x>
+        <y>25</y>
+    </size>
+  </head>
+  <characters>
+    <player>
+        <position>
+          <x>25</x>
+          <y>25</y>
+        </position>
+    </player>
+    <enemy>
+      <position>
+        <x>0</x>
+        <y>0</y>
+      </position>
+    </enemy>
+  </characters>
 </map>

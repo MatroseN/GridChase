@@ -68,7 +68,6 @@ namespace GridChase {
 
             // TODO: Add your update logic here
             foreach (Entity entity in _entities) {
-
                 if (entity.Position.X >= _windowSize.X) {
                     entity.Position = new Vector2(_windowSize.X - _block.size.X, entity.Position.Y);
                     if(entity.Tag == Tag.enemy) {
@@ -107,13 +106,7 @@ namespace GridChase {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
             }
 
-            foreach (Enemy enemy in getEnemies()) {
-                foreach (Vector2 pos in enemy.Vision) {
-                    _spriteBatch.Draw(_visionBlock.texture, pos, Color.White * 0.5f);
-                }
-            }
-
-            foreach (Entity entity in _entities) {               
+            foreach (Entity entity in _entities) {
 
                 switch (entity.Tag) {
                     case Tag.player:
@@ -122,6 +115,12 @@ namespace GridChase {
                     case Tag.enemy:
                         _spriteBatch.Draw(_enemyBlock.texture, entity.Position, Color.White);
                         break;
+                }
+            }
+
+            foreach (Enemy enemy in getEnemies()) {
+                foreach (Vector2 pos in enemy.Vision) {
+                    _spriteBatch.Draw(_visionBlock.texture, pos, Color.White * 0.5f);
                 }
             }
 

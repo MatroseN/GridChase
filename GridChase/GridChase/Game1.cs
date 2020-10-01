@@ -68,19 +68,31 @@ namespace GridChase {
 
             // TODO: Add your update logic here
             foreach (Entity entity in _entities) {
-                entity.Update(gameTime);
 
                 if (entity.Position.X >= _windowSize.X) {
                     entity.Position = new Vector2(_windowSize.X - _block.size.X, entity.Position.Y);
-                }else if (entity.Position.X <= 0) {
+                    if(entity.Tag == Tag.enemy) {
+                        entity.Direction = Direction.left;
+                    }
+                }else if (entity.Position.X < 0) {
                     entity.Position = new Vector2(0, entity.Position.Y);
+                    if (entity.Tag == Tag.enemy) {
+                        entity.Direction = Direction.right;
+                    }
                 }
 
                 if (entity.Position.Y >= _windowSize.Y - _block.size.X) {
                     entity.Position = new Vector2(entity.Position.X, _windowSize.Y - _block.size.Y);
-                }else if (entity.Position.Y <= 0) {
+                    if (entity.Tag == Tag.enemy) {
+                        entity.Direction = Direction.up;
+                    }
+                } else if (entity.Position.Y < 0) {
                     entity.Position = new Vector2(entity.Position.X, 0);
+                    if (entity.Tag == Tag.enemy) {
+                        entity.Direction = Direction.down;
+                    }
                 }
+                entity.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -95,6 +107,12 @@ namespace GridChase {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
             }
 
+            foreach (Enemy enemy in getEnemies()) {
+                foreach (Vector2 pos in enemy.Vision) {
+                    _spriteBatch.Draw(_visionBlock.texture, pos, Color.White * 0.5f);
+                }
+            }
+
             foreach (Entity entity in _entities) {               
 
                 switch (entity.Tag) {
@@ -104,12 +122,6 @@ namespace GridChase {
                     case Tag.enemy:
                         _spriteBatch.Draw(_enemyBlock.texture, entity.Position, Color.White);
                         break;
-                }
-            }
-
-            foreach (Enemy enemy in getEnemies()) {
-                foreach (Vector2 pos in enemy.Vision) {
-                    _spriteBatch.Draw(_visionBlock.texture, pos, Color.White * 0.5f);
                 }
             }
 

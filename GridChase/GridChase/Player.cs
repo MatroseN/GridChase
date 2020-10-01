@@ -58,7 +58,7 @@ namespace GridChase {
         }
         #endregion
 
-        #region PLayer methods
+        #region Player methods
         // Initializes the XML positional value to a window dependent positional value
         #endregion
 

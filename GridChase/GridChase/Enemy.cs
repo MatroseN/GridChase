@@ -1,19 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace GridChase {
     /*
      * Enemies to the PLAYABLE characters
      */
-    class Enemy : Entity, Character{
-        public Enemy(Game game, Vector2 position) : base(game) {
+    class Enemy : Entity, Character {
+        public Enemy(Game game, Vector2 position, Direction direction) : base(game) {
             this.Position = position;
             this.Health = 1.0f;
             this.Tag = Tag.enemy;
             this.Vision = new Vector2[6];
-            // TODO: This should be specified in the map XML data and not here
-            Direction = Direction.right;
+            this.IsTick = false;
+            TickDelay = new Delay(500.0);
+            Direction = direction;
         }
 
         #region Monogame Pipeline
@@ -22,7 +22,12 @@ namespace GridChase {
         }
 
         public override void Update(GameTime gameTime) {
+            tick(gameTime);
             calculateVision();
+            if (IsTick) {
+                move();
+            }
+            
             base.Update(gameTime);
         }
         #endregion
@@ -33,15 +38,28 @@ namespace GridChase {
         }
 
         public void move() {
-            throw new NotImplementedException();
+            switch (Direction) {
+                case Direction.right:
+                    Position = new Vector2(Position.X + 32, Position.Y);
+                    break;
+                case Direction.left:
+                    Position = new Vector2(Position.X - 32, Position.Y);
+                    break;
+                case Direction.up:
+                    Position = new Vector2(Position.X, Position.Y - 32);
+                    break;
+                case Direction.down:
+                    Position = new Vector2(Position.X, Position.Y + 32);
+                    break;
+            }
         }
         #endregion
 
         #region Enemy methods
         private void calculateVision() {
+            Vector2 pos = this.Position;
             switch (Direction) {
                 case Direction.right:
-                    Vector2 pos = this.Position;
                     int adder = 32;
                     for (int i = 0; i < Vision.Length; i++) {
                         Vision[i] = new Vector2(pos.X + adder, pos.Y);
@@ -49,16 +67,41 @@ namespace GridChase {
                     }
                     break;
                 case Direction.left:
+                    adder = 32;
+                    for (int i = 0; i < Vision.Length; i++) {
+                        Vision[i] = new Vector2(pos.X - adder, pos.Y);
+                        adder += 32;
+                    }
                     break;
                 case Direction.up:
+                    adder = 32;
+                    for (int i = 0; i < Vision.Length; i++) {
+                        Vision[i] = new Vector2(pos.X, pos.Y - adder);
+                        adder += 32;
+                    }
                     break;
                 case Direction.down:
+                    adder = 32;
+                    for (int i = 0; i < Vision.Length; i++) {
+                        Vision[i] = new Vector2(pos.X, pos.Y + adder);
+                        adder += 32;
+                    }
                     break;
             }
         }
-        #endregion
 
+        private void tick(GameTime gameTime) {
+            IsTick = false;
+            TickDelay.Wait(gameTime, () => {
+                IsTick = true;
+            });
+        }
+        #endregion
+        // Public properties
         public Vector2[] Vision { get; set; }
-        public Direction Direction { get; set; }
+        public Delay TickDelay { get; set; }
+         
+        // Private Properties
+        private bool IsTick { get; set; }
     }
 }

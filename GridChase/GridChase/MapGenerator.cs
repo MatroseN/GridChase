@@ -68,6 +68,7 @@ namespace GridChase {
                                 Vector2 position = new Vector2(x, y);
                                 entities.Add(new Player(game, position));
                             }else if (String.Equals(childNode.Name, "enemy")) {
+                                Direction direction = Direction.right;
                                 int x = 0;
                                 int y = 0;
                                 foreach (XmlNode childOfChildNode in childNode) {
@@ -78,10 +79,29 @@ namespace GridChase {
                                             } else if (String.Equals(childOfChildOfChild.Name, "y")) {
                                                 Int32.TryParse(childOfChildOfChild.InnerText, out y);
                                             }
+                                    }else if (String.Equals(childOfChildNode.Name, "direction")) {
+                                        string xmlText = "";
+                                        xmlText = childOfChildNode.InnerText;
+
+                                        switch (xmlText) {
+                                            case "right":
+                                                direction = Direction.right;
+                                                break;
+                                            case "left":
+                                                direction = Direction.left;
+                                                break;
+                                            case "up":
+                                                direction = Direction.up;
+                                                break;
+                                            case "down":
+                                                direction = Direction.down;
+                                                break;
+                                        }
+
                                     }
                                 }
                                 Vector2 position = new Vector2(x, y);
-                                entities.Add(new Enemy(game, position));
+                                entities.Add(new Enemy(game, position, direction));
                             }
                         }
                         break;                   

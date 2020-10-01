@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GridChase {
     public class Game1 : Game {
@@ -36,6 +37,8 @@ namespace GridChase {
 
             _playerBlock = new Block(new Vector2(32, 32));
             _enemyBlock = new Block(new Vector2(32, 32));
+            _visionBlock = new Block(new Vector2(32, 32));
+            
 
             foreach (Entity entity in _entities) {
                 entity.calculatePosition(_windowSize, _block.size);
@@ -51,6 +54,12 @@ namespace GridChase {
             _block.createTexture(GraphicsDevice, pixel => Color.DarkSlateGray);
             _playerBlock.createTexture(GraphicsDevice, pixel => Color.Green);
             _enemyBlock.createTexture(GraphicsDevice, pixel => Color.Red);
+            _visionBlock.createTexture(GraphicsDevice, pixel => Color.Yellow);
+        }
+
+        private List<Enemy> getEnemies() {
+            List<Enemy> enemies = _entities.OfType<Enemy>().ToList();
+            return enemies;
         }
 
         protected override void Update(GameTime gameTime) {
@@ -80,7 +89,7 @@ namespace GridChase {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             // TODO: Add your drawing code here
             foreach (Vector2 pos in _grid) {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
@@ -98,6 +107,12 @@ namespace GridChase {
                 }
             }
 
+            foreach (Enemy enemy in getEnemies()) {
+                foreach (Vector2 pos in enemy.Vision) {
+                    _spriteBatch.Draw(_visionBlock.texture, pos, Color.White * 0.5f);
+                }
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -106,5 +121,6 @@ namespace GridChase {
         private Block _block;
         private Block _playerBlock;
         private Block _enemyBlock;
+        private Block _visionBlock;
     }
 }

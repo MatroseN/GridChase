@@ -1,50 +1,65 @@
-﻿using System;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
+using System.Diagnostics;
 
 namespace GridChase {
     class BFS {
-        public BFS(Graph graph, Node start) {
+        public BFS(Graph graph) {
             this.graph = graph;
-            this.start = start;
-            Queue = new LinkedList<Node>();
-            Visited = new bool[graph.V];
-            initializeQueue();
         }
 
-        public void initializeQueue() {
-            for (int i = 0; i < Visited.Length; i++) {
-                Visited[i] = false;
-            }
-        }
+        public List<Node> search(Node s, Node e) {
+            Queue<Node> queue = new Queue<Node>();
+            Node node;
+            Node endNode = e;
+            Node startNode = s;
+            Dictionary<Node, Node> parent = new Dictionary<Node, Node>();
 
-        public void traverse() {
-            Visited[start.ID] = true;
-            Queue.AddLast(start);
+            queue.Enqueue(startNode);
 
-            while (Queue.Any()) {
+            while (queue.Count > 0) {
+                node = queue.Dequeue();
+                if (node == endNode) {
+                    break;
+                }
 
-                // Dequeue vetex
-                start = Queue.First();
-                Queue.RemoveFirst();
-
-                LinkedList<Node> list = graph.Adjacent[start.ID];
-
-                foreach (Node  node in list) {
-                    if (!Visited[node.ID]) {
-                        Visited[node.ID] = true;
-                        Queue.AddLast(node);
+                foreach (Node edge in node.Edges.Values) {
+                    if (!contains(queue, node)){
+                        if (!parent.ContainsKey(edge)) {
+                            parent.Add(edge, node);
+                        }
+                        queue.Enqueue(edge);
                     }
                 }
             }
+            return backtrace(parent, startNode, endNode);
         }
 
-        private Node start;
-        private Graph graph;
+        private List<Node> backtrace(Dictionary<Node, Node> parent, Node start, Node end) {
+            List<Node> path = new List<Node>();
+            Node node = parent[end];
 
-        public bool[] Visited { get; set; }
-        public LinkedList<Node> Queue { get; set; }
+            while (node != start) {
+                path.Add(node);
+                node = parent[node];
+            }
+            path.Add(start);
+
+            path.Reverse();
+
+            return path;
+        }
+
+
+        private bool contains(Queue<Node> q, Node n) {
+            foreach (Node node in q) {
+                if (node.ID == n.ID) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Graph graph;
     }
 }

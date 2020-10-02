@@ -13,11 +13,17 @@ namespace GridChase {
         private MapGenerator _mapGenerator;
         private List<Entity> _entities;
         private Vector2[] _grid;
+        private Graph _graph;
+        private BFS _BFS;
+        private List<Node> _testShortestPath;
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
             _mapGenerator = new MapGenerator(this);
             _entities = new List<Entity>();
+            _graph = new Graph();
+            _graph.Adjacent = new Dictionary<Vector2, Node>();
+            _BFS = new BFS(_graph);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -35,10 +41,19 @@ namespace GridChase {
             _grid = _mapGenerator.Grid;
             _block = new Block(new Vector2(32, 32));
 
+            for (int i = 0; i < _grid.Length; i++) {
+                _graph.Adjacent.Add(_grid[i], new Node(_grid[i], i));
+            }
+
+            _graph.addEdges();
+
+            _testShortestPath = _BFS.search(_graph.Adjacent[new Vector2(5 * 32, 2 * 32)], _graph.Adjacent[new Vector2(12 * 32, 11 * 32)]);
+
             _playerBlock = new Block(new Vector2(32, 32));
             _enemyBlock = new Block(new Vector2(32, 32));
             _visionBlock = new Block(new Vector2(32, 32));
-            
+            _testShortestPathBlock = new Block(new Vector2(32, 32));
+
 
             foreach (Entity entity in _entities) {
                 entity.calculatePosition(_windowSize, _block.size);
@@ -55,6 +70,7 @@ namespace GridChase {
             _playerBlock.createTexture(GraphicsDevice, pixel => Color.Green);
             _enemyBlock.createTexture(GraphicsDevice, pixel => Color.Red);
             _visionBlock.createTexture(GraphicsDevice, pixel => Color.Yellow);
+            _testShortestPathBlock.createTexture(GraphicsDevice, pixel => Color.Blue);
         }
 
         private List<Enemy> getEnemies() {
@@ -67,6 +83,9 @@ namespace GridChase {
                 Exit();
 
             // TODO: Add your update logic here
+            Vector2 playerPos = new Vector2(0, 0);
+            Vector2 playerPrevPos = playerPos;
+
             foreach (Entity entity in _entities) {
                 if (entity.Position.X >= _windowSize.X) {
                     entity.Position = new Vector2(_windowSize.X - _block.size.X, entity.Position.Y);
@@ -91,7 +110,9 @@ namespace GridChase {
                         entity.Direction = Direction.down;
                     }
                 }
+
                 entity.Update(gameTime);
+
             }
 
             base.Update(gameTime);
@@ -104,6 +125,10 @@ namespace GridChase {
             // TODO: Add your drawing code here
             foreach (Vector2 pos in _grid) {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
+            }
+
+            foreach (Node node in _testShortestPath) {
+                _spriteBatch.Draw(_testShortestPathBlock.texture, node.Position, Color.White);
             }
 
             foreach (Entity entity in _entities) {
@@ -133,5 +158,6 @@ namespace GridChase {
         private Block _playerBlock;
         private Block _enemyBlock;
         private Block _visionBlock;
+        private Block _testShortestPathBlock;
     }
 }

@@ -10,9 +10,9 @@ namespace GridChase {
             this.Position = position;
             this.Health = 1.0f;
             this.Tag = Tag.enemy;
-            this.Vision = new Vector2[6];
+            this.Vision = new Vector2[0];
             this.IsTick = false;
-            TickDelay = new Delay(500.0);
+            TickDelay = new Delay(400.0);
             Direction = direction;
         }
 
@@ -24,7 +24,7 @@ namespace GridChase {
         public override void Update(GameTime gameTime) {
             tick(gameTime);
             calculateVision();
-            if (IsTick) {
+            if (IsTick && !isGuided) {
                 move();
             }
             
@@ -90,18 +90,9 @@ namespace GridChase {
             }
         }
 
-        private void tick(GameTime gameTime) {
-            IsTick = false;
-            TickDelay.Wait(gameTime, () => {
-                IsTick = true;
-            });
-        }
+
         #endregion
         // Public properties
         public Vector2[] Vision { get; set; }
-        public Delay TickDelay { get; set; }
-         
-        // Private Properties
-        private bool IsTick { get; set; }
     }
 }

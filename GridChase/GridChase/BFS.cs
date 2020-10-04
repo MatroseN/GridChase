@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace GridChase {
     class BFS {
@@ -8,7 +7,27 @@ namespace GridChase {
             this.graph = graph;
         }
 
-        public List<Node> search(Node s, Node e) {
+        public Dictionary<Node, Node> allPaths(Node s) {
+            Queue<Node> queue = new Queue<Node>();
+            Node node;
+            Node startNode = s;
+            Dictionary<Node, Node> parent = new Dictionary<Node, Node>();
+
+            queue.Enqueue(startNode);
+
+            while (queue.Count != 0) {
+                node = queue.Dequeue();
+                foreach (Node edge in node.Edges.Values) {
+                    if (!parent.ContainsKey(edge)) {
+                        queue.Enqueue(edge);
+                        parent.Add(edge, node);
+                    }               
+                }
+            }
+            return parent;
+        }
+
+        public List<Node> shortestPath(Node s, Node e) {
             Queue<Node> queue = new Queue<Node>();
             Node node;
             Node endNode = e;
@@ -24,7 +43,7 @@ namespace GridChase {
                 }
 
                 foreach (Node edge in node.Edges.Values) {
-                    if (!contains(queue, node)){
+                    if (!contains(queue, node)) {
                         if (!parent.ContainsKey(edge)) {
                             parent.Add(edge, node);
                         }
@@ -33,7 +52,7 @@ namespace GridChase {
                 }
             }
             return backtrace(parent, startNode, endNode);
-        }
+        }    
 
         private List<Node> backtrace(Dictionary<Node, Node> parent, Node start, Node end) {
             List<Node> path = new List<Node>();

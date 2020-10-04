@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace GridChase {
-    class Graph {
+    public class Graph {
         public Graph() {
             Adjacent = new Dictionary<Vector2, Node>();
         }

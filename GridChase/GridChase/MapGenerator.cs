@@ -25,7 +25,7 @@ namespace GridChase {
             this.grid = grid;
         }
 
-        public void generateMap(List<Entity> entities, string mapName, Vector2 blockSize) {
+        public void generateMap(List<Entity> entities, string mapName, Vector2 blockSize, List<Vector2> barriers, Vector2 windowSize) {
             XmlDocument xml = new XmlDocument();
             xml.Load(mapName + ".xml");
 
@@ -104,7 +104,35 @@ namespace GridChase {
                                 entities.Add(new Enemy(game, position, direction));
                             }
                         }
-                        break;                   
+                        break;
+                    case "blocks":
+                        foreach (XmlNode childNode in node) {
+                            if (String.Equals(childNode.Name, "barrier")) {
+                                int x = 0;
+                                int y = 0;
+                                foreach (XmlNode childOfChildNode in childNode) {
+                                    if (String.Equals(childOfChildNode.Name, "position")) {
+                                        foreach (XmlNode childOfChildOfChild in childOfChildNode)
+                                            if (String.Equals(childOfChildOfChild.Name, "x")) {
+                                                Int32.TryParse(childOfChildOfChild.InnerText, out x);
+                                            } else if (String.Equals(childOfChildOfChild.Name, "y")) {
+                                                Int32.TryParse(childOfChildOfChild.InnerText, out y);
+                                            }
+                                    }
+                                }
+                                Vector2 position = new Vector2(x * blockSize.X, y * blockSize.Y);
+
+                                if (position.X >= windowSize.X) {
+                                    position = new Vector2(windowSize.X - blockSize.X, position.Y);
+                                }
+                                if (position.Y >= windowSize.Y) {
+                                    position = new Vector2(position.X, position.Y - blockSize.Y);
+                                }
+
+                                barriers.Add(position);
+                            }
+                        }
+                        break;
                 }
             }
         }

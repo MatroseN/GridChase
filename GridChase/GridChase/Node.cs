@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace GridChase {
-    class Node {
+    public class Node {
         public Node(Vector2 position, int ID) {
             this.Position = position;
             this.ID = ID;

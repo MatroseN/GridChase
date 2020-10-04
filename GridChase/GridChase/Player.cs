@@ -39,19 +39,35 @@ namespace GridChase {
             currentMouseState = Mouse.GetState();
 
             if ((currentKeyboardState.IsKeyDown(Keys.A) && previousKeyboardState.IsKeyUp(Keys.A)) || (currentKeyboardState.IsKeyDown(Keys.Left) && previousKeyboardState.IsKeyUp(Keys.Left))) {
-                this.Position = new Vector2(this.Position.X - 32, this.Position.Y);
+                Direction = Direction.left;
+                if (Node.Edges.ContainsKey(Direction)) {
+                    Node = Node.Edges[Direction];
+                    this.Position = Node.Position;
+                }
             }
 
             if ((currentKeyboardState.IsKeyDown(Keys.D) && previousKeyboardState.IsKeyUp(Keys.D)) || (currentKeyboardState.IsKeyDown(Keys.Right) && previousKeyboardState.IsKeyUp(Keys.Right))){
-                this.Position = new Vector2(this.Position.X + 32, this.Position.Y);
+                Direction = Direction.right;
+                if (Node.Edges.ContainsKey(Direction)) {
+                    Node = Node.Edges[Direction];
+                    this.Position = Node.Position;
+                }
             }
 
             if ((currentKeyboardState.IsKeyDown(Keys.W) && previousKeyboardState.IsKeyUp(Keys.W)) || (currentKeyboardState.IsKeyDown(Keys.Up) && previousKeyboardState.IsKeyUp(Keys.Up))) {
-                this.Position = new Vector2(this.Position.X, this.Position.Y - 32);
+                Direction = Direction.up;
+                if (Node.Edges.ContainsKey(Direction)) {
+                    Node = Node.Edges[Direction];
+                    this.Position = Node.Position;
+                }
             }
 
             if ((currentKeyboardState.IsKeyDown(Keys.S) && previousKeyboardState.IsKeyUp(Keys.S)) || (currentKeyboardState.IsKeyDown(Keys.Down) && previousKeyboardState.IsKeyUp(Keys.Down))) {
-                this.Position = new Vector2(this.Position.X, this.Position.Y + 32);
+                Direction = Direction.down;
+                if (Node.Edges.ContainsKey(Direction)) {
+                    Node = Node.Edges[Direction];
+                    this.Position = Node.Position;
+                }
             }
 
             previousKeyboardState = currentKeyboardState;
@@ -59,7 +75,13 @@ namespace GridChase {
         #endregion
 
         #region Player methods
-        // Initializes the XML positional value to a window dependent positional value
+
+        public void setNode(Graph graph) {
+            Node = graph.Adjacent[Position];
+        }
+        private void lose() {
+
+        }
         #endregion
 
         // Current and previous keyboard and mouse states

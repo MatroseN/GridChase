@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 
 namespace GridChase {
-    class Delay {
+   public class Delay {
         public Delay(double DelayTime) {
             this.DelayTime = DelayTime;
             this.Timer = 0.0;

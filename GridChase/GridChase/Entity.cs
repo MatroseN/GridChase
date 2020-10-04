@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace GridChase {
     /*
@@ -6,7 +7,7 @@ namespace GridChase {
      */
     public abstract class Entity : GameComponent{
         public Entity(Game game) : base(game) {
-
+            this.isGuided = true;
         }
 
         public void calculatePosition(Vector2 windowSize, Vector2 blockSize) {
@@ -18,12 +19,36 @@ namespace GridChase {
                 pos = new Vector2(pos.X, pos.Y - blockSize.Y);
             }
 
-            Position = pos;
+            startPos = pos;
+            Position = startPos;
+        }
+
+        public void guidedMovement(Graph graph, Dictionary<Node, Node> allPaths) {
+            if (IsTick) {
+                Node node = graph.Adjacent[Position];
+                Position = allPaths[node].Position;
+            }
+        }
+
+        public void tick(GameTime gameTime) {
+            IsTick = false;
+            TickDelay.Wait(gameTime, () => {
+                IsTick = true;
+            });
         }
 
         public Vector2 Position { get; set; }
         public float Health { get; set; }
         public Tag Tag { get; set; }
         public Direction Direction { get; set; }
+        public bool isGuided { get; set; }
+        public Delay TickDelay { get; set; }
+        public Node Node { get; set; }
+
+
+        // Private Properties
+        protected bool IsTick { get; set; }
+
+        protected Vector2 startPos { get; set; }
     }
 }

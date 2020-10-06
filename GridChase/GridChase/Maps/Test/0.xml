@@ -19,6 +19,7 @@
         <y>11</y>
       </position>
       <direction>right</direction>
+      <key></key>
     </enemy>
     <enemy>
       <position>
@@ -100,4 +101,12 @@
 
     
   </blocks>
+  <weapons>
+    <baton>
+      <position>
+        <x>2</x>
+        <y>11</y>
+      </position>
+    </baton>
+  </weapons>
 </map>

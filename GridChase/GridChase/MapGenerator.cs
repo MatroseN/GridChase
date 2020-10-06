@@ -25,7 +25,7 @@ namespace GridChase {
             this.grid = grid;
         }
 
-        public void generateMap(List<Entity> entities, string mapName, Vector2 blockSize, List<Vector2> barriers, Vector2 windowSize) {
+        public void generateMap(List<Entity> entities, string mapName, Vector2 blockSize, List<Vector2> barriers, Vector2 windowSize, List<Weapon> weapons) {
             XmlDocument xml = new XmlDocument();
             xml.Load(mapName + ".xml");
 
@@ -71,6 +71,7 @@ namespace GridChase {
                                 Direction direction = Direction.right;
                                 int x = 0;
                                 int y = 0;
+                                bool hasKey = false;
                                 foreach (XmlNode childOfChildNode in childNode) {
                                     if (String.Equals(childOfChildNode.Name, "position")) {
                                         foreach (XmlNode childOfChildOfChild in childOfChildNode)
@@ -98,10 +99,12 @@ namespace GridChase {
                                                 break;
                                         }
 
+                                    }else if (String.Equals(childOfChildNode.Name, "key")) {
+                                        hasKey = true;
                                     }
                                 }
                                 Vector2 position = new Vector2(x, y);
-                                entities.Add(new Enemy(game, position, direction));
+                                entities.Add(new Enemy(game, position, direction, hasKey));
                             }
                         }
                         break;
@@ -152,6 +155,26 @@ namespace GridChase {
                                     position = new Vector2(position.X, position.Y - blockSize.Y);
                                 }
                                 FinnishPosition = position;
+                            }
+                        }
+                        break;
+                    case "weapons":
+                        foreach (XmlNode childNode in node) {
+                            if (String.Equals(childNode.Name, "baton")) {
+                                int x = 0;
+                                int y = 0;
+                                foreach (XmlNode childOfChildNode in childNode) {
+                                    if (String.Equals(childOfChildNode.Name, "position")) {
+                                        foreach (XmlNode childOfChildOfChild in childOfChildNode)
+                                            if (String.Equals(childOfChildOfChild.Name, "x")) {
+                                                Int32.TryParse(childOfChildOfChild.InnerText, out x);
+                                            } else if (String.Equals(childOfChildOfChild.Name, "y")) {
+                                                Int32.TryParse(childOfChildOfChild.InnerText, out y);
+                                            }
+                                    }
+                                }
+                                Vector2 position = new Vector2(x, y);
+                                weapons.Add(new Baton(position));
                             }
                         }
                         break;

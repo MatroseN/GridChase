@@ -12,9 +12,11 @@ namespace GridChase {
         private MapGenerator _mapGenerator;
         private List<Entity> _entities;
         private List<Vector2> _barriers;
+        private List<Weapon> _weapons;
         private Vector2[] _grid;
         private Graph _graph;
         private BFS _BFS;
+        private bool _isFinnished;
         private List<Node> _testShortestPath;
         private Dictionary<Node, Node> _allPaths;
 
@@ -23,9 +25,11 @@ namespace GridChase {
             _mapGenerator = new MapGenerator(this);
             _entities = new List<Entity>();
             _barriers = new List<Vector2>();
+            _weapons = new List<Weapon>();
             _graph = new Graph();
             _graph.Adjacent = new Dictionary<Vector2, Node>();
             _BFS = new BFS(_graph);
+            _isFinnished = false;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -39,7 +43,7 @@ namespace GridChase {
             _graphics.ApplyChanges();
 
             Vector2 blockSize = new Vector2(32, 32);
-            _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0", blockSize, _barriers, _windowSize);
+            _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0", blockSize, _barriers, _windowSize, _weapons);
             _grid = _mapGenerator.Grid;
             _block = new Block(new Vector2(32, 32));
 
@@ -59,9 +63,14 @@ namespace GridChase {
             _barrierBlock = new Block(new Vector2(32, 32));
             _testShortestPathBlock = new Block(new Vector2(32, 32));
             _finnishBlock = new Block(new Vector2(32, 32));
+            _batonBlock = new Block(new Vector2(32, 32));
 
             foreach (Entity entity in _entities) {
                 entity.calculatePosition(_windowSize, _block.size);
+            }
+
+            foreach (Weapon weapon in _weapons) {
+                weapon.calculatePosition(_windowSize, _block.size);
             }
 
 
@@ -83,6 +92,7 @@ namespace GridChase {
             _testShortestPathBlock.createTexture(GraphicsDevice, pixel => Color.Blue);
             _barrierBlock.createTexture(GraphicsDevice, pixel => Color.Black);
             _finnishBlock.createTexture(GraphicsDevice, pixel => Color.Green);
+            _batonBlock.createTexture(GraphicsDevice, pixel => Color.LightGray);
         }
 
         private bool checkBarriers(Vector2 position) {
@@ -147,6 +157,10 @@ namespace GridChase {
                     playerPos = entity.Position;
                 }
 
+                if (entity.HasKey && entity.Tag == Tag.player && playerPos == _mapGenerator.FinnishPosition) {
+                    _isFinnished = true;
+                }
+
                 entity.Update(gameTime);
             }
 
@@ -163,6 +177,13 @@ namespace GridChase {
                 }
             }
 
+            foreach (Weapon weapon in _weapons) {
+                if (!weapon.Pickuped && weapon.Position == playerPos) {
+                    weapon.Pickuped = true;
+                    getPlayer()[0].Weapon = weapon;
+                }
+            }
+
             base.Update(gameTime);
         }
 
@@ -170,9 +191,19 @@ namespace GridChase {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+
             // TODO: Add your drawing code here
+
             foreach (Vector2 pos in _grid) {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
+            }
+
+            foreach (Weapon weapon in _weapons) {
+                if (!weapon.Pickuped) {
+                    if (weapon.Tag == Tag.baton) {
+                        _spriteBatch.Draw(_batonBlock.texture, weapon.Position, Color.White);
+                    }
+                }
             }
 
             _spriteBatch.Draw(_finnishBlock.texture, _mapGenerator.FinnishPosition, Color.White);
@@ -211,5 +242,6 @@ namespace GridChase {
         private Block _testShortestPathBlock;
         private Block _barrierBlock;
         private Block _finnishBlock;
+        private Block _batonBlock;
     }
 }

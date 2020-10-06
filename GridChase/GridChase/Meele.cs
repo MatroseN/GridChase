@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace GridChase {
-    public enum Tag {
-        player,
-        enemy,
-        baton
+    interface Meele {
+        void hit();
+        void toss();
     }
 }

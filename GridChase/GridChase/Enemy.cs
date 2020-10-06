@@ -6,12 +6,13 @@ namespace GridChase {
      * Enemies to the PLAYABLE characters
      */
     class Enemy : Entity, Character {
-        public Enemy(Game game, Vector2 position, Direction direction) : base(game) {
+        public Enemy(Game game, Vector2 position, Direction direction, bool hasKey) : base(game) {
             this.Position = position;
             this.Health = 1.0f;
             this.Tag = Tag.enemy;
             this.Vision = new Vector2[12];
             this.IsTick = false;
+            this.HasKey = hasKey;
             TickDelay = new Delay(500.0);
             Direction = direction;
         }

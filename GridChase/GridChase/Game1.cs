@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml;
 
 namespace GridChase {
     public class Game1 : Game {
@@ -44,6 +42,7 @@ namespace GridChase {
             _graph = new Graph();
             _graph.Adjacent = new Dictionary<Vector2, Node>();
             _BFS = new BFS(_graph);
+            keyDropped = false;
             _isFinnished = false;
 
             Vector2 blockSize = new Vector2(32, 32);

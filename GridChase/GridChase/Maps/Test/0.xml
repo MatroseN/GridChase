@@ -45,10 +45,17 @@
     </enemy>
     <enemy>
       <position>
-        <x>9</x>
+        <x>5</x>
+        <y>2</y>
+      </position>
+      <direction>right</direction>
+    </enemy>
+    <enemy>
+      <position>
+        <x>7</x>
         <y>4</y>
       </position>
-      <direction>left</direction>
+      <direction>up</direction>
     </enemy>
   </characters>
   
@@ -206,13 +213,115 @@
       </position>
     </barrier>
 
-    
+    <barrier>
+      <position>
+        <x>0</x>
+        <y>1</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>0</x>
+        <y>2</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>0</x>
+        <y>3</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>0</x>
+        <y>4</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>0</x>
+        <y>0</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>1</x>
+        <y>0</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>2</x>
+        <y>0</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>3</x>
+        <y>0</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>4</x>
+        <y>0</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>4</x>
+        <y>1</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>4</x>
+        <y>3</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>4</x>
+        <y>4</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>4</x>
+        <y>5</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>3</x>
+        <y>5</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>2</x>
+        <y>5</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>1</x>
+        <y>5</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>0</x>
+        <y>5</y>
+      </position>
+    </barrier>
   </blocks>
+  
   <weapons>
     <baton>
       <position>
         <x>2</x>
-        <y>4</y>
+        <y>2</y>
       </position>
     </baton>
   </weapons>

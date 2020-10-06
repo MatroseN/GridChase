@@ -232,9 +232,11 @@ namespace GridChase {
                 }
             }
 
-            _spriteBatch.Draw(_finnishBlock.texture, _mapGenerator.FinnishPosition, Color.White);
+            if (getPlayer()[0].HasKey) {
+                _spriteBatch.Draw(_finnishBlock.texture, _mapGenerator.FinnishPosition, Color.White);
+            }
 
-            if (keyDropped) {
+            if (keyDropped && !getPlayer()[0].HasKey) {
                 _spriteBatch.Draw(_visionBlock.texture, _keyPosition, Color.White);
             }
 

@@ -2,7 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml;
 
 namespace GridChase {
     public class Game1 : Game {
@@ -44,7 +47,8 @@ namespace GridChase {
             _isFinnished = false;
 
             Vector2 blockSize = new Vector2(32, 32);
-            _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0", blockSize, _barriers, _windowSize, _weapons);
+            string mapPath = Path.GetFullPath("Content/0");
+            _mapGenerator.generateMap(_entities, mapPath, blockSize, _barriers, _windowSize, _weapons);
             _grid = _mapGenerator.Grid;
             _block = new Block(new Vector2(32, 32));
 

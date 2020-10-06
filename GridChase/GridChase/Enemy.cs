@@ -9,11 +9,12 @@ namespace GridChase {
         public Enemy(Game game, Vector2 position, Direction direction, bool hasKey) : base(game) {
             this.Position = position;
             this.Health = 1.0f;
+            visionLength = 15;
             this.Tag = Tag.enemy;
-            this.Vision = new Vector2[12];
+            this.Vision = new Vector2[visionLength];
             this.IsTick = false;
             this.HasKey = hasKey;
-            TickDelay = new Delay(500.0);
+            TickDelay = new Delay(300.0);
             Direction = direction;
         }
 
@@ -24,7 +25,9 @@ namespace GridChase {
 
         public override void Update(GameTime gameTime) {
             tick(gameTime);
-            calculateVision();
+            if (!isGuided) {
+                calculateVision();
+            }
             if (IsTick && !isGuided) {
                 move();
             }
@@ -35,23 +38,27 @@ namespace GridChase {
 
         #region Character methods
         public void die() {
-            throw new NotImplementedException();
         }
 
         public void move() {
-            switch (Direction) {
-                case Direction.right:
-                    Position = new Vector2(Position.X + 32, Position.Y);
-                    break;
-                case Direction.left:
-                    Position = new Vector2(Position.X - 32, Position.Y);
-                    break;
-                case Direction.up:
-                    Position = new Vector2(Position.X, Position.Y - 32);
-                    break;
-                case Direction.down:
-                    Position = new Vector2(Position.X, Position.Y + 32);
-                    break;
+            if (Node.Edges.ContainsKey(Direction)) {
+                Position = Node.Edges[Direction].Position;
+                Node = Node.Edges[Direction];
+            } else {
+                switch (Direction) {
+                    case Direction.up:
+                        Direction = Direction.down;
+                        break;
+                    case Direction.down:
+                        Direction = Direction.up;
+                        break;
+                    case Direction.left:
+                        Direction = Direction.right;
+                        break;
+                    case Direction.right:
+                        Direction = Direction.left;
+                        break;
+                }
             }
         }
         #endregion
@@ -59,6 +66,16 @@ namespace GridChase {
         #region Enemy methods
         private void calculateVision() {
             Vector2 pos = this.Position;
+            Node tempNode = Node;
+            Vision = new Vector2[visionLength];
+            for (int i = 0; i < Vision.Length; i++) {
+                if (!tempNode.Edges.ContainsKey(Direction)) {
+                    Vision = new Vector2[i];
+                } else {
+                    tempNode = tempNode.Edges[Direction];
+                }
+            }
+
             switch (Direction) {
                 case Direction.right:
                     int adder = 32;
@@ -91,9 +108,11 @@ namespace GridChase {
             }
         }
 
-
         #endregion
         // Public properties
         public Vector2[] Vision { get; set; }
+        public bool IsDead { get; set; }
+
+        private int visionLength;
     }
 }

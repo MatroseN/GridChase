@@ -7,7 +7,7 @@ namespace GridChase {
             Pickuped = false;
         }
 
-        public abstract void attack();
+        public abstract void attack(Vector2 pos, Direction dir);
 
         public void calculatePosition(Vector2 windowSize, Vector2 blockSize) {
             Vector2 pos = new Vector2(this.Position.X * blockSize.X, this.Position.Y * blockSize.Y);

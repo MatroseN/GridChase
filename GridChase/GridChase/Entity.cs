@@ -37,6 +37,10 @@ namespace GridChase {
             });
         }
 
+        public void setNode(Graph graph) {
+            Node = graph.Adjacent[Position];
+        }
+
         public Vector2 Position { get; set; }
         public float Health { get; set; }
         public Tag Tag { get; set; }

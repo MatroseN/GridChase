@@ -25,6 +25,9 @@ namespace GridChase {
 
         public override void Update(GameTime gameTime) {
             move();
+            if (Weapon != null) {
+                attack();
+            }
             base.Update(gameTime);
         }
         #endregion
@@ -76,13 +79,26 @@ namespace GridChase {
 
         #region Player methods
 
-        public void setNode(Graph graph) {
-            Node = graph.Adjacent[Position];
+        public void attack() {
+            currentKeyboardState = Keyboard.GetState();
+            currentMouseState = Mouse.GetState();
+
+            if (currentKeyboardState.IsKeyDown(Keys.Space)) {
+                Weapon.attack(Position, Direction);
+                ISAttack = true;
+            } else {
+                Weapon.HitBox = new Vector2[0];
+                ISAttack = false;
+            }
+            previousKeyboardState = currentKeyboardState;
         }
+
         private void lose() {
 
         }
         #endregion
+
+        public bool ISAttack { get; set; }
 
         // Current and previous keyboard and mouse states
         private KeyboardState currentKeyboardState;

@@ -22,14 +22,6 @@ namespace GridChase {
 
         public Game1() {
             _graphics = new GraphicsDeviceManager(this);
-            _mapGenerator = new MapGenerator(this);
-            _entities = new List<Entity>();
-            _barriers = new List<Vector2>();
-            _weapons = new List<Weapon>();
-            _graph = new Graph();
-            _graph.Adjacent = new Dictionary<Vector2, Node>();
-            _BFS = new BFS(_graph);
-            _isFinnished = false;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -41,6 +33,15 @@ namespace GridChase {
             _graphics.PreferredBackBufferWidth = (int)_windowSize.X;
             _graphics.PreferredBackBufferHeight = (int)_windowSize.Y;
             _graphics.ApplyChanges();
+
+            _mapGenerator = new MapGenerator(this);
+            _entities = new List<Entity>();
+            _barriers = new List<Vector2>();
+            _weapons = new List<Weapon>();
+            _graph = new Graph();
+            _graph.Adjacent = new Dictionary<Vector2, Node>();
+            _BFS = new BFS(_graph);
+            _isFinnished = false;
 
             Vector2 blockSize = new Vector2(32, 32);
             _mapGenerator.generateMap(_entities,"/Side Projects/GridChase/GridChase/GridChase/Maps/Test/0", blockSize, _barriers, _windowSize, _weapons);
@@ -67,15 +68,11 @@ namespace GridChase {
 
             foreach (Entity entity in _entities) {
                 entity.calculatePosition(_windowSize, _block.size);
+                entity.setNode(_graph);
             }
 
             foreach (Weapon weapon in _weapons) {
                 weapon.calculatePosition(_windowSize, _block.size);
-            }
-
-
-            foreach (Player player in getPlayer()) {
-                player.setNode(_graph);
             }
 
             base.Initialize();
@@ -121,6 +118,16 @@ namespace GridChase {
             // TODO: Add your update logic here
             Vector2 playerPos = new Vector2(_windowSize.X - 32, _windowSize.Y - 32);
 
+            for(int i = _entities.Count - 1; i > 0; i--) {
+                if (_entities[i].Health <= 0.0) {
+                    if (_entities[i].HasKey) {
+                        _keyPosition = _entities[i].Position;
+                        keyDropped = true;
+                    }
+                    _entities.RemoveAt(i);
+                }
+            }
+
             foreach (Entity entity in _entities) {
                 if (entity.Position.X >= _windowSize.X) {
                     if (entity.Tag == Tag.enemy) {
@@ -150,6 +157,8 @@ namespace GridChase {
                     if (entity.Position != playerPos) {
                         _allPaths = _BFS.allPaths(_graph.Adjacent[playerPos]);
                         entity.guidedMovement(_graph, _allPaths);
+                    } else {
+                        Initialize();
                     }
                 }
 
@@ -159,6 +168,23 @@ namespace GridChase {
 
                 if (entity.HasKey && entity.Tag == Tag.player && playerPos == _mapGenerator.FinnishPosition) {
                     _isFinnished = true;
+                    Initialize();
+                }
+
+                if (entity.Tag == Tag.enemy) {
+                    Player player = getPlayer()[0];
+                    if (player.ISAttack) {
+                        foreach (Vector2 pos in player.Weapon.HitBox) {
+                            if (entity.Position == pos) {
+                                entity.Health -= player.Weapon.Damage;
+                            }
+                        }
+                    }
+                }
+
+                if (playerPos == _keyPosition) {
+                    entity.HasKey = true;
+                    keyDropped = false;
                 }
 
                 entity.Update(gameTime);
@@ -208,6 +234,10 @@ namespace GridChase {
 
             _spriteBatch.Draw(_finnishBlock.texture, _mapGenerator.FinnishPosition, Color.White);
 
+            if (keyDropped) {
+                _spriteBatch.Draw(_visionBlock.texture, _keyPosition, Color.White);
+            }
+
             foreach (Vector2 pos in _barriers) {
                 _spriteBatch.Draw(_barrierBlock.texture, pos, Color.White);
             }
@@ -230,6 +260,16 @@ namespace GridChase {
                 }
             }
 
+            foreach (Player player in getPlayer()) {
+                if (player.ISAttack) {
+                    foreach (Vector2 pos in player.Weapon.HitBox) {
+                        if (player.Weapon.Tag == Tag.baton) {
+                            _spriteBatch.Draw(_batonBlock.texture, pos, Color.White);
+                        }
+                    }
+                }
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
@@ -243,5 +283,8 @@ namespace GridChase {
         private Block _barrierBlock;
         private Block _finnishBlock;
         private Block _batonBlock;
+
+        private Vector2 _keyPosition;
+        private bool keyDropped = false;
     }
 }

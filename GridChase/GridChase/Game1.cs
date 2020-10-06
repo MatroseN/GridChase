@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace GridChase {
@@ -59,6 +58,7 @@ namespace GridChase {
             _visionBlock = new Block(new Vector2(32, 32));
             _barrierBlock = new Block(new Vector2(32, 32));
             _testShortestPathBlock = new Block(new Vector2(32, 32));
+            _finnishBlock = new Block(new Vector2(32, 32));
 
             foreach (Entity entity in _entities) {
                 entity.calculatePosition(_windowSize, _block.size);
@@ -82,6 +82,7 @@ namespace GridChase {
             _visionBlock.createTexture(GraphicsDevice, pixel => Color.Yellow);
             _testShortestPathBlock.createTexture(GraphicsDevice, pixel => Color.Blue);
             _barrierBlock.createTexture(GraphicsDevice, pixel => Color.Black);
+            _finnishBlock.createTexture(GraphicsDevice, pixel => Color.Green);
         }
 
         private bool checkBarriers(Vector2 position) {
@@ -109,7 +110,6 @@ namespace GridChase {
 
             // TODO: Add your update logic here
             Vector2 playerPos = new Vector2(_windowSize.X - 32, _windowSize.Y - 32);
-            Vector2 playerPrevPos = playerPos;
 
             foreach (Entity entity in _entities) {
                 if (entity.Position.X >= _windowSize.X) {
@@ -148,7 +148,19 @@ namespace GridChase {
                 }
 
                 entity.Update(gameTime);
+            }
 
+
+            foreach (Enemy enemy in getEnemies()) {
+                if (!enemy.isGuided) {
+                    foreach (Vector2 pos in enemy.Vision) {
+                        if (pos == playerPos) {
+                            enemy.isGuided = true;
+                            enemy.TickDelay = new Delay(200.0);
+                            enemy.Vision = new Vector2[0];
+                        }
+                    }
+                }
             }
 
             base.Update(gameTime);
@@ -162,6 +174,8 @@ namespace GridChase {
             foreach (Vector2 pos in _grid) {
                 _spriteBatch.Draw(_block.texture, pos, Color.White);
             }
+
+            _spriteBatch.Draw(_finnishBlock.texture, _mapGenerator.FinnishPosition, Color.White);
 
             foreach (Vector2 pos in _barriers) {
                 _spriteBatch.Draw(_barrierBlock.texture, pos, Color.White);
@@ -196,5 +210,6 @@ namespace GridChase {
         private Block _visionBlock;
         private Block _testShortestPathBlock;
         private Block _barrierBlock;
+        private Block _finnishBlock;
     }
 }

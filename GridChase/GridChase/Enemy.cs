@@ -10,9 +10,9 @@ namespace GridChase {
             this.Position = position;
             this.Health = 1.0f;
             this.Tag = Tag.enemy;
-            this.Vision = new Vector2[0];
+            this.Vision = new Vector2[12];
             this.IsTick = false;
-            TickDelay = new Delay(400.0);
+            TickDelay = new Delay(500.0);
             Direction = direction;
         }
 

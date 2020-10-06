@@ -130,6 +130,28 @@ namespace GridChase {
                                 }
 
                                 barriers.Add(position);
+                            }else if (String.Equals(childNode.Name, "finnish")) {
+                                int x = 0;
+                                int y = 0;
+                                foreach (XmlNode childOfChildNode in childNode) {
+                                    if (String.Equals(childOfChildNode.Name, "position")) {
+                                        foreach (XmlNode childOfChildOfChild in childOfChildNode)
+                                            if (String.Equals(childOfChildOfChild.Name, "x")) {
+                                                Int32.TryParse(childOfChildOfChild.InnerText, out x);
+                                            } else if (String.Equals(childOfChildOfChild.Name, "y")) {
+                                                Int32.TryParse(childOfChildOfChild.InnerText, out y);
+                                            }
+                                    }
+                                }
+                                Vector2 position = new Vector2(x * blockSize.X, y * blockSize.Y);
+
+                                if (position.X >= windowSize.X) {
+                                    position = new Vector2(windowSize.X - blockSize.X, position.Y);
+                                }
+                                if (position.Y >= windowSize.Y) {
+                                    position = new Vector2(position.X, position.Y - blockSize.Y);
+                                }
+                                FinnishPosition = position;
                             }
                         }
                         break;
@@ -146,5 +168,7 @@ namespace GridChase {
             get { return this.grid; }
             set { grid = value; }
         }
+
+        public Vector2 FinnishPosition { get; set; }
     }
 }

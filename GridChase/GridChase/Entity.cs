@@ -7,7 +7,7 @@ namespace GridChase {
      */
     public abstract class Entity : GameComponent{
         public Entity(Game game) : base(game) {
-            this.isGuided = true;
+            this.isGuided = false;
         }
 
         public void calculatePosition(Vector2 windowSize, Vector2 blockSize) {

@@ -15,31 +15,28 @@
     </player>
     <enemy>
       <position>
-        <x>10</x>
-        <y>15</y>
+        <x>2</x>
+        <y>11</y>
       </position>
-      <direction>up</direction>
+      <direction>right</direction>
+    </enemy>
+    <enemy>
+      <position>
+        <x>20</x>
+        <y>12</y>
+      </position>
+      <direction>left</direction>
     </enemy>
   </characters>
   <blocks>
-    <barrier>
+
+    <finnish>
       <position>
-        <x>1</x>
-        <y>10</y>
+        <x>12</x>
+        <y>0</y>
       </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>2</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>3</x>
-        <y>10</y>
-      </position>
-    </barrier>
+    </finnish>
+
     <barrier>
       <position>
         <x>4</x>
@@ -54,57 +51,53 @@
     </barrier>
     <barrier>
       <position>
+        <x>6</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>7</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>8</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>9</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>10</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>12</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
+        <x>13</x>
+        <y>10</y>
+      </position>
+    </barrier>
+    <barrier>
+      <position>
         <x>14</x>
         <y>10</y>
       </position>
     </barrier>
-    <barrier>
-      <position>
-        <x>15</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>16</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>17</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>18</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>19</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>20</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>21</x>
-        <y>10</y>
-      </position>
-    </barrier>
-    <barrier>
-      <position>
-        <x>22</x>
-        <y>10</y>
-      </position>
-    </barrier>
+
+    
   </blocks>
 </map>
